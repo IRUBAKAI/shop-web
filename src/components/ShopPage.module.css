@@ -13,48 +13,7 @@ html {
   padding: 30px 110px;
 }
 
-nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: relative;
-  margin-bottom: 100px;
-}
-.nav_logo {
-  position: absolute;
-  left: 50%;
-  cursor: pointer;
-}
-.nav_links {
-  list-style: none;
-  display: flex;
-  padding: 0;
-}
-.nav_links a {
-  text-decoration: none;
-  margin: 0 15px 0 0;
-  font-style: normal;
-  font-weight: 600;
-  font-size: 16px;
-  line-height: 120%;
-  text-transform: uppercase;
-  color: #1d1f22;
-}
-.nav_card {
-  font-size: 18px;
-  font-weight: 500;
-  line-height: 160%;
-  color: #1d1f22;
-  display: flex;
-  align-items: center;
-}
-.nav_card_icon {
-  margin: 9px 0 0 20px;
-  cursor: pointer;
-}
-.nav_select {
-  border: none;
-}
+/* ///PRODUCT */
 .category_name {
   font-style: normal;
   font-weight: normal;
@@ -62,7 +21,6 @@ nav {
   line-height: 160%;
 }
 
-/* ///PRODUCT */
 .product {
   display: flex;
   flex-wrap: wrap;
