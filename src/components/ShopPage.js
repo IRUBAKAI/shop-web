@@ -41,33 +41,9 @@ class ShopPage extends PureComponent {
     });
   }
 
-
   render() {
-    // const addToFavourite = (product) => {
-    //   const newFavouriteList = [...this.state.favourites, product];
-    //   const saveToLocalStorage = (product) => {
-    //     localStorage.setItem("favourite-product", JSON.stringify(product));
-    //   };
-
-    //   saveToLocalStorage(newFavouriteList);
-    //   this.setState({ favourites: newFavouriteList });
-    // };
-
-    // const fetchDataId = async (product) => {
-    //   const queryResult = await axios.post(
-    //     `http://localhost:4000/graphql/${product.id}`,
-    //     {
-    //       query: product,
-    //     }
-    //   );
-
-    //   const result = queryResult.data.data;
-    //   this.setState({
-    //     other: result.categories,
-    //   });
-    // };
-
-    
+    function handleClick(product) {}
+    console.log(this.state)
     return (
       <>
         <div className={styles.category_name}>
@@ -84,7 +60,7 @@ class ShopPage extends PureComponent {
                     to={`/productpage/${product.id}`}
                   >
                     <img src={product.gallery[0]} alt="" />
-                    <p>{product.name}</p>
+                    <p onClick={() => handleClick(product)}>{product.name}</p>
                     <div className={styles.product_currency}>
                       <span>{product.prices[0].currency}</span>
                       <span>{product.prices[0].amount}</span>
@@ -97,10 +73,12 @@ class ShopPage extends PureComponent {
     );
   }
 }
-const mapStateToProps = state => ({
 
-});
-const mapDispatchToProps = dispatch => ({
+const mapStateToProps = (state) => ({});
+const mapDispatchToProps = (dispatch) => ({
+  giveToPage: (product) => {
+    dispatch({ type: "getInfo", payload: product });
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ShopPage);
