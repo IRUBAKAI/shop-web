@@ -1,10 +1,9 @@
 import React from "react";
-import * as Constans from "./Constants";
+import * as Constans from "./utils/Constants";
 import axios from "axios";
 import styles from "./ShopPage.module.css";
 import { PureComponent } from "react";
 import { Link } from "react-router-dom";
-import { connect } from "react-redux";
 
 class ShopPage extends PureComponent {
   constructor() {
@@ -13,8 +12,6 @@ class ShopPage extends PureComponent {
       categories: [],
       clothes: {},
       tech: {},
-      favourites: [],
-      other: [],
     };
   }
 
@@ -42,14 +39,11 @@ class ShopPage extends PureComponent {
   }
 
   render() {
-    function handleClick(product) {}
-    console.log(this.state)
     return (
       <>
         <div className={styles.category_name}>
           <h1>{this.state.tech.name}</h1>
         </div>
-
         <section className={styles.product}>
           {this.state.tech.products === undefined
             ? null
@@ -60,7 +54,7 @@ class ShopPage extends PureComponent {
                     to={`/productpage/${product.id}`}
                   >
                     <img src={product.gallery[0]} alt="" />
-                    <p onClick={() => handleClick(product)}>{product.name}</p>
+                    <p>{product.name}</p>
                     <div className={styles.product_currency}>
                       <span>{product.prices[0].currency}</span>
                       <span>{product.prices[0].amount}</span>
@@ -74,11 +68,4 @@ class ShopPage extends PureComponent {
   }
 }
 
-const mapStateToProps = (state) => ({});
-const mapDispatchToProps = (dispatch) => ({
-  giveToPage: (product) => {
-    dispatch({ type: "getInfo", payload: product });
-  },
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(ShopPage);
+export default ShopPage;

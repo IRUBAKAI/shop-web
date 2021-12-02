@@ -30,8 +30,8 @@ export const GET_CATEGORY = `
         }
     }
   `;
-  export const GET_CURRENCY = `
+export const GET_CURRENCY = `
     query {
         currencies
     }
-  `
+  `;

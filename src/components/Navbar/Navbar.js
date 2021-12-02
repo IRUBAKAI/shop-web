@@ -1,8 +1,8 @@
 import { PureComponent } from "react";
 import styles from "./Navbar.module.css";
-import * as Constans from "../Constants";
+import * as Constans from "../utils/Constants";
 import axios from "axios";
-import { logo, card } from "../Icons";
+import { logo, card } from "../utils/Icons";
 import { Link } from "react-router-dom";
 
 class Navbar extends PureComponent {
@@ -60,7 +60,9 @@ class Navbar extends PureComponent {
                 );
               })}
             </select>
-            <span className={styles.nav_card_icon}>{card}</span>
+            <span className={styles.nav_card_icon}>
+              <Link to="/cartpage">{card}</Link>
+            </span>
           </div>
         </nav>
       </div>

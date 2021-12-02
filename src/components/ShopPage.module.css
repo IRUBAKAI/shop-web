@@ -10,7 +10,7 @@ html {
   color: #1d1f22;
 }
 .content {
-  padding: 30px 110px;
+  padding: 30px 110px 0;
 }
 
 /* ///PRODUCT */
@@ -44,7 +44,6 @@ html {
 }
 .product_block:hover {
   box-shadow: 0px 4px 35px rgba(168, 172, 176, 0.19);
-  transform: scale(1.1);
 }
 .product_block img {
   width: 300px;
