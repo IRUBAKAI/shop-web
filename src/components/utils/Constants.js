@@ -30,8 +30,9 @@ export const GET_CATEGORY = `
         }
     }
   `;
-  export const GET_CURRENCY = `
+export const GET_CURRENCY = `
     query {
         currencies
     }
-  `
+  `;
+export const currencySignMap = { USD: "$", GBP: "￡", AUD: "$", JPY: "¥", RUB: "₽" };

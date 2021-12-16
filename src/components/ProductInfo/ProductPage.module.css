@@ -1,0 +1,151 @@
+.content {
+  padding: 0 110px;
+}
+.main_block {
+  display: flex;
+}
+.info_block {
+  display: flex;
+  justify-content: space-between;
+  padding: 50px 0 0 25px;
+}
+.info_block h1 {
+  font-weight: 600;
+  font-size: 30px;
+  line-height: 27px;
+}
+.info_block h2 {
+  font-weight: normal;
+  margin-bottom: 40px;
+}
+.prices {
+  display: flex;
+  flex-direction: column;
+}
+.prices span {
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 18px;
+}
+.price {
+  font-size: 24px;
+  margin: 20px 0;
+}
+.info_block button {
+  width: 292px;
+  height: 52px;
+  border: none;
+  padding: 16px 32px;
+  background: #5ece7b;
+  color: #fff;
+  margin-bottom: 40px;
+  cursor: pointer;
+}
+.gallery {
+  width: 79px;
+  height: 80px;
+  margin: 0 15px 40px 0;
+}
+.main_img_block {
+  max-width: 600px;
+  height: 550px;
+  margin-right: 100px;
+}
+.main_img {
+  width: 100%;
+  height: 100%;
+}
+.product_info {
+  max-width: 300px;
+}
+.images {
+  display: flex;
+  flex-direction: column;
+  padding-top: 50px;
+  cursor: pointer;
+}
+.size_attribute p {
+  color: #1d1f22;
+  font-weight: bold;
+  font-size: 18px;
+}
+.attr_items {
+  display: flex;
+  text-align: left;
+  margin-bottom: 40px;
+}
+.attr_item label {
+  margin: 0 12px 0 0;
+}
+.unActive {
+  display: none;
+}
+.attr_item span {
+  width: 63px;
+  height: 45px;
+  border: 1px solid #a6a6a6;
+  background-color: #fff;
+  color: #a6a6a6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.attr_item input[type="radio"]:checked ~ span.active_attr_input {
+  background: #1d1f22;
+  border: 1px solid #1d1f22;
+  color: #fff;
+  cursor: pointer;
+  text-transform: uppercase;
+}
+
+@media (max-width: 1150px) {
+  .main_block {
+    display: flex;
+    flex-direction: column;
+  }
+  .images {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 1000px) {
+  .info_block {
+    display: flex;
+    flex-direction: column;
+  }
+  .main_img_block {
+    margin-bottom: 50px;
+  }
+}
+
+@media (max-width: 600px) {
+  .images {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 300px;
+  }
+  .main_block {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+  }
+  .info_block {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    width: 300px;
+  }
+  .main_img {
+    width: 300px;
+    height: 300px;
+  }
+  .main_img_block {
+    width: 300px;
+    height: 300px;
+    margin: 0;
+  }
+}
