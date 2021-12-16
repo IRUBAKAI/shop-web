@@ -4,15 +4,13 @@ import * as Constans from "../utils/Constants";
 import styles from "./ProductPage.module.css";
 
 class ProductPage extends PureComponent {
-  constructor() {
-    super();
-    this.state = {
-      product: {},
-      gallery: [],
-      prices: [],
-      favourites: [],
-    };
-  }
+  state = {
+    product: {},
+    gallery: [],
+    prices: [],
+    imageSrc: null,
+    attr: { color: "", capacity: "", size: "", withUSB: "", inTouch: "" },
+  };
 
   componentDidMount() {
     const fetchDataId = async () => {
@@ -54,78 +52,113 @@ class ProductPage extends PureComponent {
     fetchDataId();
   }
 
-   handleOnClickAdd() {
-    const newFavouriteList = [...this.state.favourites, this.state.product];
-    const saveToLocalStorage = () => {
-      localStorage.setItem("shop-favourites", JSON.stringify(this.state.product));
-    };
-
-    saveToLocalStorage(newFavouriteList);
-    this.setState({ favourites: newFavouriteList });
-  }
-
-   handleOnClickRemove() {
-    const newFavouriteList = this.state.favourites.filter((favourite) => {
-      return favourite.id !== this.state.product.id;
-    });
-    const saveToLocalStorage = () => {
-      localStorage.setItem("shop-favourites", JSON.stringify(this.state.product));
-    };
-    this.setState({ favourites: newFavouriteList });
-    saveToLocalStorage(newFavouriteList);
+  attributeName(attrName) {
+    if (attrName === "Color") return "color";
+    if (attrName === "Size") return "size";
+    if (attrName === "Capacity") return "capacity";
+    if (attrName === "With USB 3 ports") return "withUSB";
+    if (attrName === "Touch ID in keyboard") return "inTouch";
   }
 
   render() {
-    const fav = JSON.parse(localStorage.getItem("shop-favourites"));
-      console.log(fav)
     const gallery = this.state.gallery;
-    if (this.state === null) {
-      return [];
-    }
     const isFavourite = Boolean(
-      this.state.favourites.find(
+      this.props.favourites.find(
         (favouriteProduct) => favouriteProduct.id === this.state.product.id
       )
     );
-
+    if (this.state.product.prices === undefined) {
+      return null;
+    }
+    const price = this.state.product.prices.find((price) => {
+      if (price.currency === this.props.currency) {
+        return price;
+      } else return null;
+    });
     return (
-      <div className={styles.container}>
+      <div className={styles.content}>
         <div className={styles.main_block}>
           <div className={styles.images}>
             {gallery.map((img) => (
-              <img className={styles.gallery} src={img} alt="img" />
+              <img
+                className={styles.gallery}
+                onClick={(e) => this.setState({ imageSrc: e.target.src })}
+                src={img}
+                alt="img"
+              />
             ))}
           </div>
           <div className={styles.info_block}>
-            <img
-              className={styles.main_img}
-              src={this.state.gallery[0]}
-              alt=""
-            />
-            <div>
+            <div className={styles.main_img_block}>
+              <img
+                className={styles.main_img}
+                src={
+                  this.state.imageSrc === null
+                    ? this.state.gallery[0]
+                    : this.state.imageSrc
+                }
+                alt=""
+              />
+            </div>
+            <div className={styles.product_info}>
               <h1>{this.state.product.brand}</h1>
               <h2>{this.state.product.name}</h2>
-
+              <div className={styles.size}>
+                {this.state.product.attributes.map((attribute) => (
+                  <div className={styles.size_attribute}>
+                    <p>{attribute.name}:</p>
+                    <div className={styles.attr_items}>
+                      {attribute.items.map((item) => (
+                        <div className={styles.attr_item}>
+                          <label>
+                            <input
+                              className={styles.unActive}
+                              type="radio"
+                              name={this.attributeName(attribute.name)}
+                              value={item.id}
+                              onClick={(e) =>
+                                this.setState({
+                                  [e.target.name]: e.target.value,
+                                })
+                              }
+                            />
+                            <span className={styles.active_attr_input}>
+                              {item.id}
+                            </span>
+                          </label>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
               <div className={styles.prices}>
                 <span>PRICE:</span>
                 {this.state.prices[0] === undefined ? null : (
                   <span className={styles.price}>
-                    {this.state.prices[0].currency}
-                    {this.state.prices[0].amount}
+                    {Constans.currencySignMap[this.props.currency]}
+                    {price.amount}
                   </span>
                 )}
               </div>
               <button
-                    onClick={
-                      !isFavourite
-                        ? () => this.handleOnClickAdd()
-                        : () => this.handleOnClickRemove()
-                    }
-                  >
-                    {!isFavourite
-                      ? "ADD TO CART"
-                      : "DELETE FROM CART"}
-                  </button>
+                onClick={
+                  !isFavourite
+                    ? () =>
+                        this.props.handleOnClickAdd(
+                          this.state.product,
+                          this.state.color,
+                          this.state.capacity,
+                          this.state.withUSB,
+                          this.state.size,
+                          this.state.inTouch,
+                          this.props.favourites
+                        )
+                    : () => this.props.handleOnClickRemove(this.state.product)
+                }
+              >
+                {!isFavourite ? "ADD TO CART" : "DELETE FROM CART"}
+              </button>
               <p>{this.state.product.description}</p>
             </div>
           </div>

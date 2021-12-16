@@ -10,9 +10,8 @@ html {
   color: #1d1f22;
 }
 .content {
-  padding: 30px 110px 0;
+  padding: 0 110px;
 }
-
 /* ///PRODUCT */
 .category_name {
   font-style: normal;
@@ -42,9 +41,6 @@ html {
   text-align: left;
   position: relative;
 }
-.product_block:hover {
-  box-shadow: 0px 4px 35px rgba(168, 172, 176, 0.19);
-}
 .product_block img {
   width: 300px;
   height: 320px;
@@ -54,4 +50,21 @@ html {
 }
 .product_currency {
   display: flex;
+}
+.unActive {
+  display: none;
+}
+.activeCart {
+  position: absolute;
+  bottom: 80px;
+  right: 70px;
+  padding: 10px;
+  border-radius: 50%;
+  background-color: #5ece7b;
+}
+
+@media (max-width: 600px) {
+  .content {
+    padding: 0 20px;
+  }
 }

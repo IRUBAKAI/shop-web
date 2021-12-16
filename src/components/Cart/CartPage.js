@@ -1,26 +1,27 @@
 import { PureComponent } from "react";
+import styles from "./CartPage.module.css";
+import CartComponent from "./CartComponent";
 
 class CartPage extends PureComponent {
-  constructor() {
-    super();
-    this.state = {
-      favourites: [],
-    };
-  }
-  
-
-  componentDidMount() {
-    const favouriteProducts = JSON.parse(
-      localStorage.getItem("shop-favourites")
-    );
-    this.setState({ favourites: favouriteProducts})
-  }
+  state = {
+    amount: "",
+  };
 
   render() {
-    console.log(this.state.favourites)
     return (
       <>
-        <div></div>
+        <div className={styles.content}>
+          <h1>CART</h1>
+          {this.props.favourites.map((favourite) => (
+            <CartComponent
+              currency={this.props.currency}
+              favourite={favourite}
+              handleOnClickAdd={this.props.handleOnClickAdd}
+              handleOnClickRemove={this.props.handleOnClickRemove}
+              styles={styles}
+            />
+          ))}
+        </div>
       </>
     );
   }

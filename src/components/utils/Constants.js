@@ -35,3 +35,4 @@ export const GET_CURRENCY = `
         currencies
     }
   `;
+export const currencySignMap = { USD: "$", GBP: "￡", AUD: "$", JPY: "¥", RUB: "₽" };
