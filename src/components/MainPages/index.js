@@ -1,2 +1,1 @@
-export { default as TechPage } from "./TechPage";
-export { default as ClothesPage } from "./ClothesPage";
+export { default as ShopPage } from "./ShopPage";

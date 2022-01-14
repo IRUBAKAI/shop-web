@@ -6,37 +6,71 @@ import { whiteCart } from "../utils/Icons";
 import * as Constans from "../utils/Constants";
 
 class PageComponent extends PureComponent {
-
-  render() {
+  isFavourite = () => {
     const isFavourite = Boolean(
       this.props.favourites.find(
         (favouriteProduct) => favouriteProduct.id === this.props.product.id
       )
     );
+    return isFavourite;
+  };
+
+  priceSwitcher = () => {
     const price = this.props.product.prices.find((price) => {
       if (price.currency === this.props.currency) {
         return price;
-      }else return null;
+      } else return null;
     });
+    return price.amount;
+  };
+
+  render() {
+    const product = this.props.product;
     return (
       <>
-        <div className={styles.product_block}>
-          <span className={isFavourite ? styles.activeCart : styles.unActive}>
-            {whiteCart}
-          </span>
-          <Link
-            className={styles.product_text_decoration}
-            to={`/productpage/${this.props.product.id}`}
-            key={this.props.index}
-          >
-            <img src={this.props.product.gallery[0]} alt="" />
-            <p>{this.props.product.name}</p>
-            <div className={styles.product_currency}>
-              <span>{Constans.currencySignMap[this.props.currency]}</span>
-              <span>{price.amount}</span>
-            </div>
-          </Link>
-        </div>
+        <li className={styles.product_block}>
+          <div className={styles.tyle}>
+            <button
+              disabled={
+                product.inStock === false
+                  ? true
+                  : this.isFavourite()
+                  ? true
+                  : false
+              }
+              onClick={() => this.props.handleOnClickAdd(product)}
+              className={styles.activeCart}
+            >
+              {whiteCart}
+            </button>
+            <Link
+              className={styles.product_text_decoration}
+              to={`/productpage/${product.id}`}
+              key={this.props.index}
+            >
+              <div className={styles.image_block}>
+                <img src={product.gallery[0]} alt="" />
+              </div>
+              <h2
+                className={
+                  product.inStock === false
+                    ? styles.outOfStock
+                    : styles.unActive
+                }
+              >
+                OUT OF STOCK
+              </h2>
+              <p>
+                <span>{product.brand} </span>
+                {product.name}
+              </p>
+              <div className={styles.product_currency}>
+                <span>{Constans.currencySignMap[this.props.currency]}</span>
+                <span>{this.priceSwitcher()}</span>
+              </div>
+            </Link>
+          </div>
+        </li>
       </>
     );
   }

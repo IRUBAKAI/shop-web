@@ -2,50 +2,57 @@ import { PureComponent } from "react";
 import * as Constans from "../utils/Constants";
 import { leftArrow, rightArrow } from "../utils/Icons";
 
-const PAGE_WIDTH = 200;
-
 class CartComponent extends PureComponent {
   state = {
-    offset: 0,
-    galleryLength: "",
+    current: 0,
   };
 
   nextSlide = () => {
-    this.setState({ offset: this.state.offset - PAGE_WIDTH });
-    const maxLength = -PAGE_WIDTH * (this.props.favourite.gallery.length - 1);
-    this.setState({ galleryLength: maxLength });
+    const current = this.state.current;
+    const galleryLength = this.props.favourite.gallery.length;
+    this.setState({ current: current === galleryLength - 1 ? 0 : current + 1 });
   };
   prevSlide = () => {
-    this.setState({ offset: this.state.offset + PAGE_WIDTH });
+    const current = this.state.current;
+    const galleryLength = this.props.favourite.gallery.length;
+    this.setState({ current: current === 0 ? galleryLength - 1 : current - 1 });
   };
+
+  priceSwitcher() {
+    const price = this.props.favourite.prices.find((price) => {
+      if (price.currency === this.props.currency) {
+        return price;
+      } else return null;
+    });
+    return price.amount;
+  }
 
   render() {
     const styles = this.props.styles;
     const favourite = this.props.favourite;
-    const currency = this.props.currency;
-
-    const price = favourite.prices.find((price) => {
-      if (price.currency === currency) {
-        return price;
-      } else return null;
-    });
+    const favouriteAttributes = Object.values(favourite.attr);
     return (
       <>
         <div>
-          <div className={styles.product_block}>
+          <div className={styles.product_block} id="main">
             <div className={styles.info_product}>
               <h1>{favourite.brand}</h1>
               <h2>{favourite.name}</h2>
               <span className={styles.price}>
-                {Constans.currencySignMap[currency]}
+                {Constans.currencySignMap[this.props.currency]}
               </span>
               <span className={styles.price}>
-                {(price.amount * favourite.qty).toFixed(2)}
+                {this.priceSwitcher().toFixed(2)}
               </span>
               <div className={styles.size}>
-                {favourite.attr.map((attr) =>
+                {favouriteAttributes.map((attr) =>
                   attr === undefined ? null : (
-                    <span className={styles.attr}>{attr}</span>
+                    <span
+                    onClick={(e) => console.log(e.target)}
+                      className={styles.attr}
+                    >
+                      {attr}
+                    </span>
                   )
                 )}
               </div>
@@ -53,9 +60,16 @@ class CartComponent extends PureComponent {
             <div className={styles.products_number}>
               <div className={styles.add_more_products}>
                 <button
-                  onClick={() => {
-                    this.props.handleOnClickAdd(favourite);
-                  }}
+                  onClick={() =>
+                    this.props.handleOnClickAdd(
+                      favourite,
+                      favourite.attr.color,
+                      favourite.attr.capacity,
+                      favourite.attr.withUSB,
+                      favourite.attr.size,
+                      favourite.attr.inTouch
+                    )
+                  }
                 >
                   +
                 </button>
@@ -69,32 +83,36 @@ class CartComponent extends PureComponent {
                 </button>
               </div>
               <div className={styles.cart_images}>
-                {favourite.gallery.map((item, index) => (
-                  <img
-                    style={{
-                      width: `${PAGE_WIDTH}px`,
-                      transform: `translate(${this.state.offset}px)`,
-                    }}
-                    key={index}
-                    className={styles.cart_image}
-                    src={item}
-                    alt=""
-                  />
-                ))}
+                {favourite.gallery.map((item, index) => {
+                  return (
+                    <>
+                      {index === this.state.current && (
+                        <img
+                          key={index}
+                          className={styles.cart_image}
+                          src={item}
+                          alt=""
+                        />
+                      )}
+                    </>
+                  );
+                })}
                 <button
-                  disabled={this.state.offset === 0 ? true : false}
-                  className={styles.btn_left_arrow}
+                  className={
+                    this.props.favourite.gallery.length > 1
+                      ? styles.btn_left_arrow
+                      : styles.unActive
+                  }
                   onClick={() => this.prevSlide()}
                 >
                   {leftArrow}
                 </button>
                 <button
-                  disabled={
-                    this.state.galleryLength === this.state.offset
-                      ? true
-                      : false
+                  className={
+                    this.props.favourite.gallery.length > 1
+                      ? styles.btn_right_arrow
+                      : styles.unActive
                   }
-                  className={styles.btn_right_arrow}
                   onClick={() => this.nextSlide()}
                 >
                   {rightArrow}
