@@ -106,8 +106,7 @@ nav {
 }
 @media (max-width: 600px) {
   nav {
-    max-width: 200px;
-    padding: 0px 0 0 40px;
+    padding: 0px 0 20px 40px;
   }
   .favourites_number {
     right: -13px;
@@ -138,7 +137,7 @@ nav {
   }
   .nav_card {
     position: absolute;
-    top: 90px;
+    top: 50px;
   }
 }
 @media (max-width: 500px) {

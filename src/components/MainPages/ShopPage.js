@@ -15,8 +15,9 @@ class ShopPage extends PureComponent {
             <ul className={styles.product}>
               {this.props.product.products === undefined
                 ? null
-                : this.props.product.products.map((product) => (
+                : this.props.product.products.map((product, index) => (
                     <PageComponent
+                      index={index}
                       currency={this.props.currency}
                       favourites={this.props.favourites}
                       product={product}

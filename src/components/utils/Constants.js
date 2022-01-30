@@ -35,4 +35,36 @@ export const GET_CURRENCY = `
         currencies
     }
   `;
-export const currencySignMap = { USD: "$", GBP: "￡", AUD: "$", JPY: "¥", RUB: "₽" };
+export const GET_ID = (id) =>
+  `query {
+       product (id: "${id}") {
+         id
+         name
+         inStock
+         description
+         gallery
+         category
+         brand
+         prices {
+             currency
+             amount
+         }
+         attributes {
+             id 
+             name
+             type
+             items {
+                 displayValue
+                 value
+                 id
+             }
+         }
+       }
+     }`;
+export const currencySignMap = {
+  USD: "$",
+  GBP: "￡",
+  AUD: "$",
+  JPY: "¥",
+  RUB: "₽",
+};

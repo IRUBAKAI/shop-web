@@ -1,6 +1,8 @@
 import { PureComponent } from "react";
 import * as Constans from "../utils/Constants";
 import { leftArrow, rightArrow } from "../utils/Icons";
+import AttributeComponent from "./AttributeComponent";
+
 
 class CartComponent extends PureComponent {
   state = {
@@ -24,37 +26,35 @@ class CartComponent extends PureComponent {
         return price;
       } else return null;
     });
-    return price.amount;
+    if (price.amount >= 1000) return Math.trunc(price.amount).toLocaleString();
+    return price.amount.toFixed(0);
   }
 
   render() {
     const styles = this.props.styles;
     const favourite = this.props.favourite;
-    const favouriteAttributes = Object.values(favourite.attr);
+    const attribute = favourite.attr;
     return (
       <>
-        <div>
-          <div className={styles.product_block} id="main">
+        <div key={this.props.index}>
+          <div className={styles.product_block}>
             <div className={styles.info_product}>
               <h1>{favourite.brand}</h1>
               <h2>{favourite.name}</h2>
               <span className={styles.price}>
                 {Constans.currencySignMap[this.props.currency]}
               </span>
-              <span className={styles.price}>
-                {this.priceSwitcher().toFixed(2)}
-              </span>
+              <span className={styles.price}>{this.priceSwitcher()}</span>
               <div className={styles.size}>
-                {favouriteAttributes.map((attr) =>
-                  attr === undefined ? null : (
-                    <span
-                    onClick={(e) => console.log(e.target)}
-                      className={styles.attr}
-                    >
-                      {attr}
-                    </span>
-                  )
-                )}
+                {Object.keys(attribute).map((attr, index) => (
+                  <AttributeComponent
+                    attr={attr}
+                    favourite={favourite}
+                    styles={styles}
+                    attribute={attribute}
+                    index={index}
+                  />
+                ))}
               </div>
             </div>
             <div className={styles.products_number}>

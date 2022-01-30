@@ -21,14 +21,15 @@ class PageComponent extends PureComponent {
         return price;
       } else return null;
     });
-    return price.amount;
+    if (price.amount >= 1000) return Math.floor(price.amount).toLocaleString();
+    return price.amount.toFixed(0);
   };
 
   render() {
     const product = this.props.product;
     return (
       <>
-        <li className={styles.product_block}>
+        <li key={this.props.index} className={styles.product_block}>
           <div className={styles.tyle}>
             <button
               disabled={
@@ -46,7 +47,6 @@ class PageComponent extends PureComponent {
             <Link
               className={styles.product_text_decoration}
               to={`/productpage/${product.id}`}
-              key={this.props.index}
             >
               <div className={styles.image_block}>
                 <img src={product.gallery[0]} alt="" />

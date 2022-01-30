@@ -7,14 +7,14 @@ import MiniCart from "../Cart/MiniCart";
 import logo from "../utils/logo.png";
 import axios from "axios";
 
-const techHost = "http://localhost:3000/";
+const techHost = "http://localhost:3000/shop-web";
 const clothHost = "http://localhost:3000/clothespage";
 
 class Navbar extends PureComponent {
   state = {
     currencies: [],
     currencySign: "$",
-    currency: 'USD',
+    currency: "USD",
     miniCartStatus: "unActive",
     switcherStatus: "unActive",
   };
@@ -49,11 +49,15 @@ class Navbar extends PureComponent {
     this.setState({ miniCartStatus: "unActive" });
   };
 
-  render() {
+  quntityValue() {
     let quantity = 0;
     for (let i = 0; i < this.props.favourites.length; i++) {
       quantity += this.props.favourites[i].qty;
     }
+    return quantity;
+  }
+
+  render() {
     return (
       <div>
         <div
@@ -70,7 +74,7 @@ class Navbar extends PureComponent {
                   techHost === window.location.href ? styles.activeUrl : null
                 }
                 onClick={(e) => this.setState({ urlStatus: e.target.href })}
-                to="/"
+                to="/shop-web"
               >
                 Tech
               </Link>
@@ -90,7 +94,7 @@ class Navbar extends PureComponent {
 
           <Link
             className={styles.nav_logo}
-            to="/"
+            to="/shop-web"
             onClick={(e) => this.setState({ urlStatus: e.target.href })}
           >
             <img className={styles.nav_logo} src={logo} alt="" />
@@ -128,7 +132,7 @@ class Navbar extends PureComponent {
                         this.setState({
                           currencySign: Constans.currencySignMap[currency],
                           currency: currency,
-                          switcherStatus: "unActive"
+                          switcherStatus: "unActive",
                         });
                       }}
                     >
@@ -149,17 +153,19 @@ class Navbar extends PureComponent {
             </span>
             <span
               className={
-                quantity >= 1 ? styles.favourites_number : styles.unActive
+                this.quntityValue() >= 1
+                  ? styles.favourites_number
+                  : styles.unActive
               }
             >
-              {quantity}
+              {this.quntityValue()}
             </span>
             {this.state.miniCartStatus === "active" ? (
               <MiniCart
                 updateMiniCartStatus={this.updateMiniCartStatus}
                 attr={this.props.attr}
                 reducedCart={this.props.reducedCart}
-                quantity={quantity}
+                quantity={this.quntityValue()}
                 currency={this.state.currency}
                 favourites={this.props.favourites}
                 handleOnClickAdd={this.props.handleOnClickAdd}

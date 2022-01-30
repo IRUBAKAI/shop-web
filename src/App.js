@@ -2,9 +2,9 @@ import React, { PureComponent } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ShopPage } from "./components/MainPages";
 import { Navbar } from "./components/Navbar";
-import { GetId } from "./components/ProductInfo";
+import { ProductPage } from "./components/ProductInfo";
 import CartPage from "./components/Cart/CartPage";
-import * as Constans from "./components/utils/Constants";
+import { GRAPHQL_API, GET_CATEGORY } from "./components/utils/Constants";
 import axios from "axios";
 import Checkout from "./components/Cart/Checkout";
 import FinishPage from "./components/Cart/FinishPage";
@@ -33,19 +33,30 @@ class App extends PureComponent {
   };
 
   handleOnClickRemove = (product) => {
+    const favourites = this.state.favourites;
     const reducedCart = Object.values(this.reduceFav());
-    for (let i = 0; i < reducedCart.length; i++) {
-      let exist = reducedCart[i].find(
+    reducedCart.map((cart) => {
+      let exist = cart.find(
         (x) => JSON.stringify(x.attr) === JSON.stringify(product.attr)
       );
+      if (exist === undefined) return null;
       if (exist.qty === 1) {
         this.setState({
-          favourites: this.state.favourites.filter(
+          favourites: favourites.filter(
             (x) => JSON.stringify(x.attr) !== JSON.stringify(exist.attr)
           ),
         });
+      } else {
+        this.setState(
+          favourites.find((x) =>
+            JSON.stringify(x.attr) === JSON.stringify(product.attr)
+              ? {favourites: favourites.splice(favourites.indexOf(x), 1)}
+              : null
+          )
+        );
       }
-    }
+      return exist;
+    });
   };
 
   reduceFav = () => {
@@ -67,8 +78,8 @@ class App extends PureComponent {
 
   componentDidMount() {
     const getCategoryFromGraph = async () => {
-      const queryResult = await axios.post(Constans.GRAPHQL_API, {
-        query: Constans.GET_CATEGORY,
+      const queryResult = await axios.post(GRAPHQL_API, {
+        query: GET_CATEGORY,
       });
 
       const result = queryResult.data.data;
@@ -105,7 +116,7 @@ class App extends PureComponent {
         />
         <Routes>
           <Route
-            path="/"
+            path="/shop-web"
             element={
               <ShopPage
                 currency={this.state.currency}
@@ -131,7 +142,8 @@ class App extends PureComponent {
             exact
             path="/productpage/:id"
             element={
-              <GetId
+              <ProductPage
+                productId={this.state.id}
                 currency={this.state.currency}
                 favourites={this.state.favourites}
                 handleOnClickAdd={this.handleOnClickAdd}

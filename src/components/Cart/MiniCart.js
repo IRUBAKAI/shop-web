@@ -16,6 +16,20 @@ class MiniCart extends PureComponent {
     this.setState({ currentPage: value });
   };
 
+  totalPrice() {
+    let totalPrice = 0;
+    for (let i = 0; i < this.props.favourites.length; i++) {
+      const price = this.props.favourites[i].prices.find((price) => {
+        if (price.currency === this.props.currency) {
+          return price;
+        } else return null;
+      });
+      totalPrice += price.amount * this.props.favourites[i].qty;
+    }
+    if (totalPrice >= 1000) return Math.trunc(totalPrice).toLocaleString();
+    return Math.floor(totalPrice);
+  }
+
   render() {
     ///pagination
     const currentPage = this.state.currentPage;
@@ -28,15 +42,6 @@ class MiniCart extends PureComponent {
     const currentCart = reducedCart.slice(indexOfFirstCart, indexOfLastCart);
     const howManyPages = Math.ceil(favourites.length / cartPerPage);
     ///totalPrice
-    let totalPrice = 0;
-    for (let i = 0; i < favourites.length; i++) {
-      const price = favourites[i].prices.find((price) => {
-        if (price.currency === this.props.currency) {
-          return price;
-        } else return null;
-      });
-      totalPrice += price.amount * favourites[i].qty;
-    }
     return (
       <>
         <div className={styles.hover_block_cart}>
@@ -44,8 +49,9 @@ class MiniCart extends PureComponent {
             <span>My Bag</span>, {this.props.quantity} items
           </h2>
           {currentCart.map((cart) =>
-            cart.map((el) => (
+            cart.map((el, index) => (
               <CartComponent
+                index={index}
                 reducedCart={reducedCart}
                 currency={this.props.currency}
                 favourite={el}
@@ -63,10 +69,10 @@ class MiniCart extends PureComponent {
               updateCurrentPage={this.updateCurrentPage}
             />
           ) : null}
-          {totalPrice === 0 ? null : (
+          {this.totalPrice() === 0 ? null : (
             <p className={styles.total_price}>
               Total : {Constans.currencySignMap[this.props.currency]}
-              {totalPrice.toFixed(2)}
+              {this.totalPrice()}
             </p>
           )}
           <Link

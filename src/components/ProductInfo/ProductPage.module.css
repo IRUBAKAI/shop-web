@@ -2,6 +2,9 @@
   padding: 0 110px;
   display: flex;
 }
+#green {
+  background-color: red !important;
+}
 .main_info_block_left {
   display: flex;
   flex-direction: row;
@@ -57,7 +60,6 @@
   flex-direction: column;
   justify-content: center;
   height: 700px;
-  margin: auto;
 }
 .main_img_block {
   width: 400px;
@@ -104,6 +106,7 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  text-align: center;
 }
 .attr_item input[type="radio"]:checked ~ span.active_attr_input {
   background: #1d1f22;
@@ -112,54 +115,64 @@
   cursor: pointer;
   text-transform: uppercase;
 }
-
 @media (max-width: 1150px) {
-  .main_block {
+  .main_info_block_left {
     display: flex;
     flex-direction: column;
   }
-  .images {
+  .gallery_container {
     display: flex;
+    height: 50px;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: center;
+    align-items: center;
+  }
+  .images {
+    margin: 0 5px;
+    align-items: center;
   }
 }
 
 @media (max-width: 1000px) {
-  .info_block {
-    display: flex;
-    flex-direction: column;
-  }
-  .main_img_block {
-    margin-bottom: 50px;
+  .content {
+    flex-wrap: wrap;
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 980px) { 
+  .content {
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+  }
+  .main_info_block_right, .main_info_block_left {
+    align-items: center;
+    text-align: center;
+    margin: auto;
+    justify-content: center;
+  }
+  .attr_items {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 640px) {
+  .content {
+    padding: 10px;
+    flex-wrap: wrap;
+  }
+  .main_info_block_right, .main_info_block_left {
+    align-items: center;
+    text-align: center;
+    margin: auto;
+  }
+  .gallery_container {
+    width: 440px;
+  }
   .images {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    width: 300px;
-  }
-  .main_block {
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-  }
-  .info_block {
-    display: flex;
-    flex-direction: column;
-    padding: 0;
-    width: 300px;
-  }
-  .main_img {
-    width: 300px;
-    height: 300px;
-  }
-  .main_img_block {
-    width: 300px;
-    height: 300px;
-    margin: 0;
+    max-width: 300px;
   }
 }
