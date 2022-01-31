@@ -15,7 +15,7 @@ class ProductPage extends PureComponent {
   componentDidMount() {
     const fetchDataId = async () => {
       const queryResult = await axios.post(GRAPHQL_API, {
-        query: GET_ID(window.location.href.slice(39)),
+        query: GET_ID(window.location.href.slice(34)),
       });
 
       const result = queryResult.data.data;
