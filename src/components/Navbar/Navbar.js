@@ -7,8 +7,8 @@ import MiniCart from "../Cart/MiniCart";
 import logo from "../utils/logo.png";
 import axios from "axios";
 
-const techHost = "https://irubakai.github.io/shop-web";
-const clothHost = "https://irubakai.github.io/clothespage";
+const techHost = "http://localhost:3000/shop-web";
+const clothHost = "http://localhost:3000/clothespage";
 
 class Navbar extends PureComponent {
   state = {
