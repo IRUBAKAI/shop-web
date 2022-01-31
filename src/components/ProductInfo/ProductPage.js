@@ -13,7 +13,7 @@ class ProductPage extends PureComponent {
   };
 
   componentDidMount() {
-    let id = window.location.href.slice(34);
+    let id = window.location.href.slice(39);
     const fetchDataId = async () => {
       const queryResult = await axios.post(GRAPHQL_API, {
         query: GET_ID(id),
@@ -49,7 +49,6 @@ class ProductPage extends PureComponent {
     return (
       <div className={styles.content}>
         <div className={styles.main_info_block_left}>
-          <p>1</p>
           <ul className={styles.gallery_container}>
             {gallery.map((img, index) => (
               <li key={index} className={styles.images}>
