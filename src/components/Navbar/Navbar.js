@@ -60,7 +60,6 @@ class Navbar extends PureComponent {
   render() {
     return (
       <div>
-          <p>1</p>
         <div
           className={
             this.state.miniCartStatus === "active" ? styles.overlay : null
