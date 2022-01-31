@@ -1,14 +1,14 @@
 import React, { PureComponent } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { TechPage } from "./components/MainPages";
-import { ClothesPage } from "./components/MainPages";
+import { ShopPage } from "./components/MainPages";
 import { Navbar } from "./components/Navbar";
-import { GetId } from "./components/ProductInfo";
+import { ProductPage } from "./components/ProductInfo";
 import CartPage from "./components/Cart/CartPage";
-import * as Constans from "./components/utils/Constants";
+import { GRAPHQL_API, GET_CATEGORY } from "./components/utils/Constants";
 import axios from "axios";
 import Checkout from "./components/Cart/Checkout";
 import FinishPage from "./components/Cart/FinishPage";
+import _ from "lodash";
 
 class App extends PureComponent {
   state = {
@@ -20,45 +20,66 @@ class App extends PureComponent {
   };
 
   handleOnClickAdd = (product, color, capacity, withUSB, size, inTouch) => {
-    const exist = this.state.favourites.find((x) => x.id === product.id);
-    if (exist) {
-      this.setState({
-        favourites: this.state.favourites.map((x) =>
-          x.id === product.id ? { ...exist, qty: exist.qty + 1 } : x
-        ),
-      });
-    } else
-      this.setState({
-        favourites: [
-          ...this.state.favourites,
-          {
-            ...product,
-            qty: 1,
-            attr: [color, capacity, size, withUSB, inTouch]
-          },
-        ],
-      });
+    this.setState({
+      favourites: [
+        ...this.state.favourites,
+        {
+          ...product,
+          qty: 1,
+          attr: { color, capacity, size, withUSB, inTouch },
+        },
+      ],
+    });
   };
 
   handleOnClickRemove = (product) => {
-    const exist = this.state.favourites.find((x) => x.id === product.id);
-    if (exist.qty === 1) {
-      this.setState({
-        favourites: this.state.favourites.filter((x) => x.id !== product.id),
+    const favourites = this.state.favourites;
+    const reducedCart = Object.values(this.reduceFav());
+    reducedCart.map((cart) => {
+      let exist = cart.find(
+        (x) => JSON.stringify(x.attr) === JSON.stringify(product.attr)
+      );
+      if (exist === undefined) return null;
+      if (exist.qty === 1) {
+        this.setState({
+          favourites: favourites.filter(
+            (x) => JSON.stringify(x.attr) !== JSON.stringify(exist.attr)
+          ),
+        });
+      } else {
+        this.setState(
+          favourites.find((x) =>
+            JSON.stringify(x.attr) === JSON.stringify(product.attr)
+              ? {favourites: favourites.splice(favourites.indexOf(x), 1)}
+              : null
+          )
+        );
+      }
+      return exist;
+    });
+  };
+
+  reduceFav = () => {
+    const clonedCart = _.cloneDeep(this.state.favourites);
+    const reduced = clonedCart.reduce((acc, item) => {
+      const itemAttr = Object.values(item.attr).map((key) => {
+        return key;
       });
-    } else {
-      this.setState({
-        favourites: this.state.favourites.map((x) =>
-          x.id === product.id ? { ...exist, qty: exist.qty - 1 } : x
-        ),
-      });
-    }
+      if (!acc[itemAttr]) {
+        acc[itemAttr] = [];
+        acc[itemAttr].push(item);
+      } else {
+        acc[itemAttr].forEach((el) => el.qty++);
+      }
+      return acc;
+    }, {});
+    return reduced;
   };
 
   componentDidMount() {
-    const fetchData = async () => {
-      const queryResult = await axios.post(Constans.GRAPHQL_API, {
-        query: Constans.GET_CATEGORY,
+    const getCategoryFromGraph = async () => {
+      const queryResult = await axios.post(GRAPHQL_API, {
+        query: GET_CATEGORY,
       });
 
       const result = queryResult.data.data;
@@ -66,7 +87,8 @@ class App extends PureComponent {
         categories: result.categories,
       });
     };
-    fetchData();
+
+    getCategoryFromGraph();
   }
 
   componentDidUpdate() {
@@ -83,64 +105,70 @@ class App extends PureComponent {
 
   render() {
     return (
-        <Router>
-          <Navbar
-            updateCurrency={this.updateCurrency}
-            currency={this.state.currency}
-            favourites={this.state.favourites}
-            handleOnClickAdd={this.handleOnClickAdd}
-            handleOnClickRemove={this.handleOnClickRemove}
+      <Router>
+        <Navbar
+          updateCurrency={this.updateCurrency}
+          currency={this.state.currency}
+          favourites={this.state.favourites}
+          reducedCart={this.reduceFav()}
+          handleOnClickAdd={this.handleOnClickAdd}
+          handleOnClickRemove={this.handleOnClickRemove}
+        />
+        <Routes>
+          <Route
+            path="/shop-web"
+            element={
+              <ShopPage
+                currency={this.state.currency}
+                favourites={this.state.favourites}
+                product={this.state.tech}
+                handleOnClickAdd={this.handleOnClickAdd}
+              />
+            }
           />
-          <Routes>
-            <Route
-              path="/"
-              element={
-                <TechPage
-                  currency={this.state.currency}
-                  favourites={this.state.favourites}
-                  tech={this.state.tech}
-                />
-              }
-            />
-            <Route
-              path="/clothespage"
-              element={
-                <ClothesPage
-                  currency={this.state.currency}
-                  favourites={this.state.favourites}
-                  clothes={this.state.clothes}
-                />
-              }
-            />
-            <Route
-              exact
-              path="/productpage/:id"
-              element={
-                <GetId
-                  currency={this.state.currency}
-                  favourites={this.state.favourites}
-                  handleOnClickAdd={this.handleOnClickAdd}
-                  handleOnClickRemove={this.handleOnClickRemove}
-                />
-              }
-            />
-            <Route
-              exact
-              path="/cartpage"
-              element={
-                <CartPage
-                  attr={this.state.attr}
-                  currency={this.state.currency}
-                  favourites={this.state.favourites}
-                  handleOnClickAdd={this.handleOnClickAdd}
-                  handleOnClickRemove={this.handleOnClickRemove}
-                />
-              }
-            />
-            <Route exact path="/checkout" element={<Checkout />} />
-            <Route exact path="/finishpage" element={<FinishPage />} />
-          </Routes>
-        </Router>
+          <Route
+            exact
+            path="/clothespage"
+            element={
+              <ShopPage
+                product={this.state.clothes}
+                currency={this.state.currency}
+                favourites={this.state.favourites}
+                handleOnClickAdd={this.handleOnClickAdd}
+              />
+            }
+          />
+          <Route
+            exact
+            path="/productpage/:id"
+            element={
+              <ProductPage
+                productId={this.state.id}
+                currency={this.state.currency}
+                favourites={this.state.favourites}
+                handleOnClickAdd={this.handleOnClickAdd}
+                handleOnClickRemove={this.handleOnClickRemove}
+              />
+            }
+          />
+          <Route
+            exact
+            path="/cartpage"
+            element={
+              <CartPage
+                attr={this.state.attr}
+                currency={this.state.currency}
+                favourites={this.state.favourites}
+                reducedCart={this.reduceFav()}
+                handleOnClickAdd={this.handleOnClickAdd}
+                handleOnClickRemove={this.handleOnClickRemove}
+              />
+            }
+          />
+          <Route exact path="/checkout" element={<Checkout />} />
+          <Route exact path="/finishpage" element={<FinishPage />} />
+        </Routes>
+      </Router>
     );
   }
 }

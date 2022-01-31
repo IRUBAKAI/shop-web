@@ -37,16 +37,16 @@ h2 {
   color: #1d1f22;
 }
 .hover_block_cart {
-  width: 400px;
+  max-width: 400px;
   position: absolute;
-  top: 80px;
+  top: 90px;
   right: 110px;
   padding: 10px;
   background-color: #fff;
 }
 .cartpage_btn {
   text-align: center;
-  margin: 40px 0 0 50px;
+  margin: 30px 0 0 50px;
   width: 120px;
   height: 43px;
   font-weight: 600;
@@ -62,11 +62,26 @@ h2 {
   border: none;
 }
 .size {
+  width: 120px;
   margin-top: 15px;
+  display: flex;
+  flex-wrap: wrap;
+}
+.size span {
+  text-align: center;
+  margin: 5px 0;
+}
+.attrName {
+  font-size: 12px;
+  margin-right: 2px!important;
+}
+.attr_color {
+  width: 40px;
 }
 .attr {
-  padding: 5px;
-  font-size: 14px;
+  max-width: 80px;
+  padding: 0 5px;
+  font-size: 10px;
   background: #fff;
   border: 1px solid #1d1f22;
   color: #1d1f22;
@@ -85,9 +100,13 @@ h2 {
 .btn_right_arrow {
   display: none;
 }
+.unActive {
+  display: none;
+}
+
 @media (max-width: 600px) {
   .hover_block_cart {
-    top: 30px;
+    top: 50px;
     left: -40px;
   }
 }

@@ -1,7 +1,7 @@
 body {
   position: relative;
 }
-.background_dark {
+.overlay {
   position: fixed;
   background-color: rgba(0, 0, 0, 0.308);
   z-index: 2;
@@ -56,8 +56,31 @@ nav {
   cursor: pointer;
   position: relative;
 }
-.nav_select {
-  border: none;
+.switcher p{
+	width:35px;
+  background-repeat:no-repeat;
+	background-size: 12px 19px;
+	background-position:right 5px;
+  cursor: pointer;
+  position: relative;
+  font-size: 18px;
+}
+.swithcerOpen {
+  background-image: url(../utils/up_arrow_switcher.svg);
+}
+.switcherClose {
+  background-image: url(../utils/down_arrow_switcher.svg);
+}
+.switcher_list{
+  list-style: none;
+  position: absolute;
+  top: 70px;
+  right: 127px;
+  color: #1D1F22;
+}
+.switcher_list li {
+  cursor: pointer;
+  font-size: 18px;
 }
 .activeUrl {
   color: #5ece7b !important;
@@ -83,8 +106,7 @@ nav {
 }
 @media (max-width: 600px) {
   nav {
-    max-width: 200px;
-    padding: 0px 0 0 40px;
+    padding: 0px 0 20px 40px;
   }
   .favourites_number {
     right: -13px;
@@ -115,7 +137,7 @@ nav {
   }
   .nav_card {
     position: absolute;
-    top: 90px;
+    top: 50px;
   }
 }
 @media (max-width: 500px) {

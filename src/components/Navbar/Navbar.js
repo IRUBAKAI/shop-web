@@ -1,26 +1,28 @@
 import { PureComponent } from "react";
 import styles from "./Navbar.module.css";
 import * as Constans from "../utils/Constants";
-import axios from "axios";
 import { cart } from "../utils/Icons";
 import { Link } from "react-router-dom";
 import MiniCart from "../Cart/MiniCart";
 import logo from "../utils/logo.png";
+import axios from "axios";
 
-const techHost = "http://localhost:3000/";
+const techHost = "http://localhost:3000/shop-web";
 const clothHost = "http://localhost:3000/clothespage";
 
 class Navbar extends PureComponent {
   state = {
     currencies: [],
-    status: "unActive",
-    pageUrl: window.location.href,
+    currencySign: "$",
+    currency: "USD",
+    miniCartStatus: "unActive",
+    switcherStatus: "unActive",
   };
 
   componentDidMount() {
-    const fetchData = async () => {
+    const getCurrencyFromGraph = async () => {
       const queryResult = await axios.post(Constans.GRAPHQL_API, {
-        query: Constans.GET_CATEGORY,
+        query: Constans.GET_CURRENCY,
       });
 
       const result = queryResult.data.data;
@@ -28,26 +30,41 @@ class Navbar extends PureComponent {
         currencies: result.currencies,
       });
     };
-    fetchData();
+    getCurrencyFromGraph();
   }
 
   statusCart() {
-    if (this.state.status === "unActive") {
-      this.setState({ status: "active" });
-    } else this.setState({ status: "unActive" });
+    if (this.state.miniCartStatus === "unActive") {
+      this.setState({ miniCartStatus: "active" });
+    } else this.setState({ miniCartStatus: "unActive" });
   }
 
-  render() {
+  statusSwitcher() {
+    if (this.state.switcherStatus === "unActive") {
+      this.setState({ switcherStatus: "active" });
+    } else this.setState({ switcherStatus: "unActive" });
+  }
+
+  updateMiniCartStatus = () => {
+    this.setState({ miniCartStatus: "unActive" });
+  };
+
+  quntityValue() {
     let quantity = 0;
     for (let i = 0; i < this.props.favourites.length; i++) {
       quantity += this.props.favourites[i].qty;
     }
+    return quantity;
+  }
+
+  render() {
     return (
       <div>
         <div
           className={
-            this.state.status === "active" ? styles.background_dark : null
+            this.state.miniCartStatus === "active" ? styles.overlay : null
           }
+          onClick={() => this.setState({ miniCartStatus: "unActive" })}
         ></div>
         <nav>
           <ul className={styles.nav_links}>
@@ -57,7 +74,7 @@ class Navbar extends PureComponent {
                   techHost === window.location.href ? styles.activeUrl : null
                 }
                 onClick={(e) => this.setState({ urlStatus: e.target.href })}
-                to="/"
+                to="/shop-web"
               >
                 Tech
               </Link>
@@ -77,41 +94,79 @@ class Navbar extends PureComponent {
 
           <Link
             className={styles.nav_logo}
-            to="/"
+            to="/shop-web"
             onClick={(e) => this.setState({ urlStatus: e.target.href })}
           >
             <img className={styles.nav_logo} src={logo} alt="" />
           </Link>
 
           <div className={styles.nav_card}>
-            <select
-              className={styles.nav_select}
-              onChange={(e) => this.props.updateCurrency(e.target.value)}
-            >
-              {this.state.currencies.map((currency, index) => (
-                <option value={currency} key={index}>
-                  {Constans.currencySignMap[currency]}
-                </option>
-              ))}
-            </select>
+            <div className={styles.switcher}>
+              <p
+                className={
+                  this.state.switcherStatus === "active"
+                    ? styles.swithcerOpen
+                    : styles.switcherClose
+                }
+                onClick={() => {
+                  this.statusSwitcher();
+                  this.setState({ miniCartStatus: "unActive" });
+                }}
+              >
+                {this.state.currencySign}
+              </p>
+              <ul
+                className={
+                  this.state.switcherStatus === "active"
+                    ? styles.switcher_list
+                    : styles.unActive
+                }
+              >
+                {this.state.currencies.map((currency, index) => (
+                  <>
+                    <li
+                      value={currency}
+                      key={index}
+                      onClick={() => {
+                        this.props.updateCurrency(currency);
+                        this.setState({
+                          currencySign: Constans.currencySignMap[currency],
+                          currency: currency,
+                          switcherStatus: "unActive",
+                        });
+                      }}
+                    >
+                      {Constans.currencySignMap[currency]} {currency}
+                    </li>
+                  </>
+                ))}
+              </ul>
+            </div>
             <span
               className={styles.nav_card_icon}
-              onClick={() => this.statusCart()}
+              onClick={() => {
+                this.statusCart();
+                this.setState({ switcherStatus: "unActive" });
+              }}
             >
               {cart}
             </span>
             <span
               className={
-                quantity >= 1 ? styles.favourites_number : styles.unActive
+                this.quntityValue() >= 1
+                  ? styles.favourites_number
+                  : styles.unActive
               }
             >
-              {quantity}
+              {this.quntityValue()}
             </span>
-            {this.state.status === "active" ? (
+            {this.state.miniCartStatus === "active" ? (
               <MiniCart
+                updateMiniCartStatus={this.updateMiniCartStatus}
                 attr={this.props.attr}
-                quantity={quantity}
-                currency={this.props.currency}
+                reducedCart={this.props.reducedCart}
+                quantity={this.quntityValue()}
+                currency={this.state.currency}
                 favourites={this.props.favourites}
                 handleOnClickAdd={this.props.handleOnClickAdd}
                 handleOnClickRemove={this.props.handleOnClickRemove}
