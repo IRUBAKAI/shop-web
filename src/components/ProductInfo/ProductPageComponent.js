@@ -47,7 +47,7 @@ export default class ProductPageComponent extends PureComponent {
                       <span
                         className={
                           attribute.name === "Color"
-                            ? item.id.toLowerCase()
+                            ? item.id
                             : styles.active_attr_input
                         }
                       >

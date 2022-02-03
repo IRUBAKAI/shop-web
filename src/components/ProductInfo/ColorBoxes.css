@@ -1,18 +1,18 @@
-.green {
+.Green {
     background-color: green !important;
 }
-.cyan {
+.Cyan {
     background-color: cyan !important;
 }
-.black {
+.Black {
     background-color: black !important;
 }
-.white {
+.White {
     background-color: white !important;
 }
-.blue {
+.Blue {
     background-color: blue !important;
 }
-.green, .cyan, .black, .blue, .white {
+.Green, .Cyan, .Black, .Blue, .White {
     padding: 2px 20px;
 }
