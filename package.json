@@ -1,4 +1,5 @@
 {
+  "homepage": "https://IRUBAKAI.github.io/shop-web",
   "name": "shop",
   "version": "0.1.0",
   "private": true,
@@ -7,7 +8,6 @@
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
     "axios": "^0.24.0",
-    "html-react-parser": "^1.4.6",
     "lodash": "^4.17.21",
     "lodash.clone": "^4.5.0",
     "modules": "^0.4.0",
@@ -23,6 +23,8 @@
     "web-vitals": "^1.1.2"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
