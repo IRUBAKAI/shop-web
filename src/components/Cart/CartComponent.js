@@ -1,5 +1,5 @@
 import { PureComponent } from "react";
-import * as Constans from "../utils/Constants";
+import {currencySignMap} from "../utils/Constants";
 import { leftArrow, rightArrow } from "../utils/Icons";
 import AttributeComponent from "./AttributeComponent";
 
@@ -42,7 +42,7 @@ class CartComponent extends PureComponent {
               <h1>{favourite.brand}</h1>
               <h2>{favourite.name}</h2>
               <span className={styles.price}>
-                {Constans.currencySignMap[this.props.currency]}
+                {currencySignMap[this.props.currency]}
               </span>
               <span className={styles.price}>{this.priceSwitcher()}</span>
               <div className={styles.size}>

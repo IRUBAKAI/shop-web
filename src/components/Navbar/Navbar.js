@@ -1,6 +1,6 @@
 import { PureComponent } from "react";
 import styles from "./Navbar.module.css";
-import * as Constans from "../utils/Constants";
+import { GRAPHQL_API, GET_CURRENCY, currencySignMap } from "../utils/Constants";
 import { cart } from "../utils/Icons";
 import { Link } from "react-router-dom";
 import MiniCart from "../Cart/MiniCart";
@@ -21,8 +21,8 @@ class Navbar extends PureComponent {
 
   componentDidMount() {
     const getCurrencyFromGraph = async () => {
-      const queryResult = await axios.post(Constans.GRAPHQL_API, {
-        query: Constans.GET_CURRENCY,
+      const queryResult = await axios.post(GRAPHQL_API, {
+        query: GET_CURRENCY,
       });
 
       const result = queryResult.data.data;
@@ -62,9 +62,19 @@ class Navbar extends PureComponent {
       <div>
         <div
           className={
-            this.state.miniCartStatus === "active" ? styles.overlay : null
+            this.state.miniCartStatus === "active"
+              ? styles.miniCart_overlay
+              : null
           }
           onClick={() => this.setState({ miniCartStatus: "unActive" })}
+        ></div>
+        <div
+          className={
+            this.state.switcherStatus === "active"
+              ? styles.switcher_overlay
+              : null
+          }
+          onClick={() => this.setState({ switcherStatus: "unActive" })}
         ></div>
         <nav>
           <ul className={styles.nav_links}>
@@ -130,13 +140,13 @@ class Navbar extends PureComponent {
                       onClick={() => {
                         this.props.updateCurrency(currency);
                         this.setState({
-                          currencySign: Constans.currencySignMap[currency],
+                          currencySign: currencySignMap[currency],
                           currency: currency,
                           switcherStatus: "unActive",
                         });
                       }}
                     >
-                      {Constans.currencySignMap[currency]} {currency}
+                      {currencySignMap[currency]} {currency}
                     </li>
                   </>
                 ))}

@@ -1,5 +1,6 @@
 import { PureComponent } from "react";
 import { currencySignMap } from "../utils/Constants";
+import parser from "html-react-parser";
 import "./ColorBoxes.css";
 
 export default class ProductPageComponent extends PureComponent {
@@ -14,6 +15,7 @@ export default class ProductPageComponent extends PureComponent {
     if (attrName === "With USB 3 ports") return "withUSB";
     if (attrName === "Touch ID in keyboard") return "inTouch";
   }
+  
   render() {
     const product = this.props.product;
     const styles = this.props.styles;
@@ -27,7 +29,7 @@ export default class ProductPageComponent extends PureComponent {
             <div key={index} className={styles.size_attribute}>
               <p>{attribute.name}:</p>
               <div className={styles.attr_items}>
-                {attribute.items.map((item, index) => (
+              {attribute.items.map((item, index) => (
                   <div key={index} className={styles.attr_item}>
                     <label>
                       <input
@@ -69,11 +71,7 @@ export default class ProductPageComponent extends PureComponent {
         </div>
         <button
           disabled={
-            product.attributes.length === 0
-              ? false
-              : this.state.isChecked === false
-              ? true
-              : product.inStock === false
+              product.inStock === false
               ? true
               : false
           }
@@ -90,11 +88,7 @@ export default class ProductPageComponent extends PureComponent {
         >
           ADD TO CART
         </button>
-        <p
-          dangerouslySetInnerHTML={{
-            __html: product.description,
-          }}
-        ></p>
+        {parser(`<p>${product.description}</p>`)}
       </>
     );
   }

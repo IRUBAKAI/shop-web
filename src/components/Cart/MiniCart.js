@@ -2,7 +2,7 @@ import { PureComponent } from "react";
 import CartComponent from "./CartComponent";
 import styles from "./MiniCart.module.css";
 import { Link } from "react-router-dom";
-import * as Constans from "../utils/Constants";
+import {currencySignMap} from "../utils/Constants";
 import Pagination from "../Pagination/Pagination";
 
 class MiniCart extends PureComponent {
@@ -71,7 +71,7 @@ class MiniCart extends PureComponent {
           ) : null}
           {this.totalPrice() === 0 ? null : (
             <p className={styles.total_price}>
-              Total : {Constans.currencySignMap[this.props.currency]}
+              Total : {currencySignMap[this.props.currency]}
               {this.totalPrice()}
             </p>
           )}

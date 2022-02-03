@@ -2,9 +2,6 @@
   padding: 0 110px;
   display: flex;
 }
-#green {
-  background-color: red !important;
-}
 .main_info_block_left {
   display: flex;
   flex-direction: row;
@@ -108,7 +105,7 @@
   cursor: pointer;
   text-align: center;
 }
-.attr_item input[type="radio"]:checked ~ span.active_attr_input {
+.attr_item input[type="radio"]:checked ~ span {
   background: #1d1f22;
   border: 1px solid #1d1f22;
   color: #fff;

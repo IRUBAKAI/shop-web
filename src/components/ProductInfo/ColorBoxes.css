@@ -13,3 +13,6 @@
 .blue {
     background-color: blue !important;
 }
+.green, .cyan, .black, .blue, .white {
+    padding: 2px 20px;
+}
