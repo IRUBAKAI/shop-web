@@ -71,7 +71,9 @@ export default class ProductPageComponent extends PureComponent {
         </div>
         <button
           disabled={
-              product.inStock === false
+              isChecked === false
+              ? true
+              : product.inStock === false
               ? true
               : false
           }
