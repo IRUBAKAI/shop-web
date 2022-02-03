@@ -13,10 +13,10 @@ export default class AttributeComponent extends PureComponent {
         ) : null}
         <span
           className={
-            attribute.name === "color"
-              ? attribute[attr].toLowerCase()
+            attr === "color"
+              ? attribute[attr]
               : attribute[attr] === undefined
-              ? styles.unActive
+              ? null
               : styles.attr
           }
         >

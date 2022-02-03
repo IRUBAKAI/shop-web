@@ -3,7 +3,7 @@ import { PureComponent } from "react";
 import { Link } from "react-router-dom";
 import styles from "./ShopPage.module.css";
 import { whiteCart } from "../utils/Icons";
-import * as Constans from "../utils/Constants";
+import {currencySignMap} from "../utils/Constants";
 
 class PageComponent extends PureComponent {
   isFavourite = () => {
@@ -35,8 +35,6 @@ class PageComponent extends PureComponent {
               disabled={
                 product.inStock === false
                   ? true
-                  : this.isFavourite()
-                  ? true
                   : false
               }
               onClick={() => this.props.handleOnClickAdd(product)}
@@ -65,7 +63,7 @@ class PageComponent extends PureComponent {
                 {product.name}
               </p>
               <div className={styles.product_currency}>
-                <span>{Constans.currencySignMap[this.props.currency]}</span>
+                <span>{currencySignMap[this.props.currency]}</span>
                 <span>{this.priceSwitcher()}</span>
               </div>
             </Link>
