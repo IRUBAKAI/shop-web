@@ -91,7 +91,6 @@ class App extends PureComponent {
   };
 
   render() {
-    console.log(this.state.categories)
     return (
       <Router>
         <Navbar
