@@ -22,7 +22,7 @@ html {
 .outOfStock {
   font-size: 24px;
   line-height: 160%;
-  color: #8d8f9a;
+  color: #8d8f9a !important;
   position: absolute;
   bottom: 50%;
   left: 80px;

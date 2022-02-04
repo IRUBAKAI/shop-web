@@ -15,10 +15,11 @@ export default class ProductPageComponent extends PureComponent {
     if (attrName === "With USB 3 ports") return "withUSB";
     if (attrName === "Touch ID in keyboard") return "inTouch";
   }
-  
+
   render() {
     const product = this.props.product;
     const styles = this.props.styles;
+    const isChecked = this.state.isChecked;
     const attributes = this.props.attributes;
     return (
       <>
@@ -29,7 +30,7 @@ export default class ProductPageComponent extends PureComponent {
             <div key={index} className={styles.size_attribute}>
               <p>{attribute.name}:</p>
               <div className={styles.attr_items}>
-              {attribute.items.map((item, index) => (
+                {attribute.items.map((item, index) => (
                   <div key={index} className={styles.attr_item}>
                     <label>
                       <input
@@ -71,7 +72,9 @@ export default class ProductPageComponent extends PureComponent {
         </div>
         <button
           disabled={
-              product.inStock === false
+            isChecked === false
+              ? true
+              : product.inStock === false
               ? true
               : false
           }

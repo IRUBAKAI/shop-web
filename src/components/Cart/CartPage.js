@@ -14,7 +14,7 @@ class CartPage extends PureComponent {
             cart.map((el) => (
               <CartComponent
                 currency={this.props.currency}
-                favourite={el}
+                cartItem={el}
                 handleOnClickAdd={this.props.handleOnClickAdd}
                 handleOnClickRemove={this.props.handleOnClickRemove}
                 styles={styles}

@@ -11,17 +11,17 @@ class CartComponent extends PureComponent {
 
   nextSlide = () => {
     const current = this.state.current;
-    const galleryLength = this.props.favourite.gallery.length;
+    const galleryLength = this.props.cartItem.gallery.length;
     this.setState({ current: current === galleryLength - 1 ? 0 : current + 1 });
   };
   prevSlide = () => {
     const current = this.state.current;
-    const galleryLength = this.props.favourite.gallery.length;
+    const galleryLength = this.props.cartItem.gallery.length;
     this.setState({ current: current === 0 ? galleryLength - 1 : current - 1 });
   };
 
   priceSwitcher() {
-    const price = this.props.favourite.prices.find((price) => {
+    const price = this.props.cartItem.prices.find((price) => {
       if (price.currency === this.props.currency) {
         return price;
       } else return null;
@@ -32,15 +32,15 @@ class CartComponent extends PureComponent {
 
   render() {
     const styles = this.props.styles;
-    const favourite = this.props.favourite;
-    const attribute = favourite.attr;
+    const cartItem = this.props.cartItem;
+    const attribute = cartItem.attr;
     return (
       <>
         <div key={this.props.index}>
           <div className={styles.product_block}>
             <div className={styles.info_product}>
-              <h1>{favourite.brand}</h1>
-              <h2>{favourite.name}</h2>
+              <h1>{cartItem.brand}</h1>
+              <h2>{cartItem.name}</h2>
               <span className={styles.price}>
                 {currencySignMap[this.props.currency]}
               </span>
@@ -49,7 +49,6 @@ class CartComponent extends PureComponent {
                 {Object.keys(attribute).map((attr, index) => (
                   <AttributeComponent
                     attr={attr}
-                    favourite={favourite}
                     styles={styles}
                     attribute={attribute}
                     index={index}
@@ -62,28 +61,28 @@ class CartComponent extends PureComponent {
                 <button
                   onClick={() =>
                     this.props.handleOnClickAdd(
-                      favourite,
-                      favourite.attr.color,
-                      favourite.attr.capacity,
-                      favourite.attr.withUSB,
-                      favourite.attr.size,
-                      favourite.attr.inTouch
+                      cartItem,
+                      cartItem.attr.color,
+                      cartItem.attr.capacity,
+                      cartItem.attr.withUSB,
+                      cartItem.attr.size,
+                      cartItem.attr.inTouch
                     )
                   }
                 >
                   +
                 </button>
-                <p>{favourite.qty}</p>
+                <p>{cartItem.qty}</p>
                 <button
                   onClick={() => {
-                    this.props.handleOnClickRemove(favourite);
+                    this.props.handleOnClickRemove(cartItem);
                   }}
                 >
                   -
                 </button>
               </div>
               <div className={styles.cart_images}>
-                {favourite.gallery.map((item, index) => {
+                {cartItem.gallery.map((item, index) => {
                   return (
                     <>
                       {index === this.state.current && (
@@ -99,7 +98,7 @@ class CartComponent extends PureComponent {
                 })}
                 <button
                   className={
-                    this.props.favourite.gallery.length > 1
+                    this.props.cartItem.gallery.length > 1
                       ? styles.btn_left_arrow
                       : styles.unActive
                   }
@@ -109,7 +108,7 @@ class CartComponent extends PureComponent {
                 </button>
                 <button
                   className={
-                    this.props.favourite.gallery.length > 1
+                    this.props.cartItem.gallery.length > 1
                       ? styles.btn_right_arrow
                       : styles.unActive
                   }

@@ -4,15 +4,13 @@ import { ShopPage } from "./components/MainPages";
 import { Navbar } from "./components/Navbar";
 import { ProductPage } from "./components/ProductInfo";
 import CartPage from "./components/Cart/CartPage";
-import { GRAPHQL_API, GET_CATEGORY } from "./components/utils/Constants";
-import axios from "axios";
 import Checkout from "./components/Cart/Checkout";
 import FinishPage from "./components/Cart/FinishPage";
 import _ from "lodash";
 
 class App extends PureComponent {
   state = {
-    favourites: [],
+    cart: [],
     categories: [],
     clothes: [],
     tech: [],
@@ -21,8 +19,8 @@ class App extends PureComponent {
 
   handleOnClickAdd = (product, color, capacity, withUSB, size, inTouch) => {
     this.setState({
-      favourites: [
-        ...this.state.favourites,
+      cart: [
+        ...this.state.cart,
         {
           ...product,
           qty: 1,
@@ -33,24 +31,24 @@ class App extends PureComponent {
   };
 
   handleOnClickRemove = (product) => {
-    const favourites = this.state.favourites;
-    const reducedCart = Object.values(this.reduceFav());
-    reducedCart.map((cart) => {
-      let exist = cart.find(
+    const cart = this.state.cart;
+    const reducedCart = Object.values(this.reduceCart());
+    reducedCart.map((reducedCartItem) => {
+      let exist = reducedCartItem.find(
         (x) => JSON.stringify(x.attr) === JSON.stringify(product.attr)
       );
       if (exist === undefined) return null;
       if (exist.qty === 1) {
         this.setState({
-          favourites: favourites.filter(
+          cart: cart.filter(
             (x) => JSON.stringify(x.attr) !== JSON.stringify(exist.attr)
           ),
         });
       } else {
         this.setState(
-          favourites.find((x) =>
+          cart.find((x) =>
             JSON.stringify(x.attr) === JSON.stringify(product.attr)
-              ? {favourites: favourites.splice(favourites.indexOf(x), 1)}
+              ? { cart: cart.splice(cart.indexOf(x), 1) }
               : null
           )
         );
@@ -59,8 +57,8 @@ class App extends PureComponent {
     });
   };
 
-  reduceFav = () => {
-    const clonedCart = _.cloneDeep(this.state.favourites);
+  reduceCart = () => {
+    const clonedCart = _.cloneDeep(this.state.cart);
     const reduced = clonedCart.reduce((acc, item) => {
       const itemAttr = Object.values(item.attr).map((key) => {
         return key;
@@ -76,21 +74,6 @@ class App extends PureComponent {
     return reduced;
   };
 
-  componentDidMount() {
-    const getCategoryFromGraph = async () => {
-      const queryResult = await axios.post(GRAPHQL_API, {
-        query: GET_CATEGORY,
-      });
-
-      const result = queryResult.data.data;
-      this.setState({
-        categories: result.categories,
-      });
-    };
-
-    getCategoryFromGraph();
-  }
-
   componentDidUpdate() {
     this.state.categories.map((category) => {
       if (category.name === "clothes") {
@@ -103,14 +86,20 @@ class App extends PureComponent {
     this.setState({ currency: value });
   };
 
+  updateCategories = (value) => {
+    this.setState({ categories: value });
+  };
+
   render() {
+    console.log(this.state.categories)
     return (
       <Router>
         <Navbar
+          currencies={this.state.currencies}
           updateCurrency={this.updateCurrency}
           currency={this.state.currency}
-          favourites={this.state.favourites}
-          reducedCart={this.reduceFav()}
+          cart={this.state.cart}
+          reducedCart={this.reduceCart()}
           handleOnClickAdd={this.handleOnClickAdd}
           handleOnClickRemove={this.handleOnClickRemove}
         />
@@ -119,9 +108,10 @@ class App extends PureComponent {
             path="/shop-web"
             element={
               <ShopPage
-                currency={this.state.currency}
-                favourites={this.state.favourites}
+                updateCategories={this.updateCategories}
                 product={this.state.tech}
+                currency={this.state.currency}
+                cart={this.state.cart}
                 handleOnClickAdd={this.handleOnClickAdd}
               />
             }
@@ -131,9 +121,10 @@ class App extends PureComponent {
             path="/clothespage"
             element={
               <ShopPage
+                updateCategories={this.updateCategories}
                 product={this.state.clothes}
                 currency={this.state.currency}
-                favourites={this.state.favourites}
+                cart={this.state.cart}
                 handleOnClickAdd={this.handleOnClickAdd}
               />
             }
@@ -143,9 +134,8 @@ class App extends PureComponent {
             path="/productpage/:id"
             element={
               <ProductPage
-                productId={this.state.id}
                 currency={this.state.currency}
-                favourites={this.state.favourites}
+                cart={this.state.cart}
                 handleOnClickAdd={this.handleOnClickAdd}
                 handleOnClickRemove={this.handleOnClickRemove}
               />
@@ -158,8 +148,8 @@ class App extends PureComponent {
               <CartPage
                 attr={this.state.attr}
                 currency={this.state.currency}
-                favourites={this.state.favourites}
-                reducedCart={this.reduceFav()}
+                cart={this.state.cart}
+                reducedCart={this.reduceCart()}
                 handleOnClickAdd={this.handleOnClickAdd}
                 handleOnClickRemove={this.handleOnClickRemove}
               />

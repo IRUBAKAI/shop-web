@@ -18,13 +18,13 @@ class MiniCart extends PureComponent {
 
   totalPrice() {
     let totalPrice = 0;
-    for (let i = 0; i < this.props.favourites.length; i++) {
-      const price = this.props.favourites[i].prices.find((price) => {
+    for (let i = 0; i < this.props.cart.length; i++) {
+      const price = this.props.cart[i].prices.find((price) => {
         if (price.currency === this.props.currency) {
           return price;
         } else return null;
       });
-      totalPrice += price.amount * this.props.favourites[i].qty;
+      totalPrice += price.amount * this.props.cart[i].qty;
     }
     if (totalPrice >= 1000) return Math.trunc(totalPrice).toLocaleString();
     return Math.floor(totalPrice);
@@ -34,13 +34,13 @@ class MiniCart extends PureComponent {
     ///pagination
     const currentPage = this.state.currentPage;
     const cartPerPage = this.state.jokesPerPage;
-    const favourites = this.props.favourites;
+    const cart = this.props.cart;
     const reducedCart = Object.values(this.props.reducedCart);
 
     const indexOfLastCart = currentPage * cartPerPage;
     const indexOfFirstCart = indexOfLastCart - cartPerPage;
     const currentCart = reducedCart.slice(indexOfFirstCart, indexOfLastCart);
-    const howManyPages = Math.ceil(favourites.length / cartPerPage);
+    const howManyPages = Math.ceil(cart.length / cartPerPage);
     ///totalPrice
     return (
       <>
@@ -54,7 +54,7 @@ class MiniCart extends PureComponent {
                 index={index}
                 reducedCart={reducedCart}
                 currency={this.props.currency}
-                favourite={el}
+                cartItem={el}
                 handleOnClickRemove={this.props.handleOnClickRemove}
                 handleOnClickAdd={this.props.handleOnClickAdd}
                 styles={styles}
@@ -83,7 +83,7 @@ class MiniCart extends PureComponent {
           </Link>
           <Link to="/checkout">
             <button
-              disabled={favourites.length === 0 ? true : false}
+              disabled={cart.length === 0 ? true : false}
               className={styles.cartpage_btn}
             >
               CHECK OUT

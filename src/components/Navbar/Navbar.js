@@ -1,6 +1,6 @@
 import { PureComponent } from "react";
 import styles from "./Navbar.module.css";
-import { GRAPHQL_API, GET_CURRENCY, currencySignMap } from "../utils/Constants";
+import { currencySignMap, GET_CURRENCY, GRAPHQL_API } from "../utils/Constants";
 import { cart } from "../utils/Icons";
 import { Link } from "react-router-dom";
 import MiniCart from "../Cart/MiniCart";
@@ -12,25 +12,24 @@ const clothHost = "https://irubakai.github.io/clothespage";
 
 class Navbar extends PureComponent {
   state = {
-    currencies: [],
     currencySign: "$",
     currency: "USD",
     miniCartStatus: "unActive",
     switcherStatus: "unActive",
+    currencies: []
   };
 
   componentDidMount() {
-    const getCurrencyFromGraph = async () => {
+    const getCategoryFromGraph = async () => {
       const queryResult = await axios.post(GRAPHQL_API, {
         query: GET_CURRENCY,
       });
 
       const result = queryResult.data.data;
-      this.setState({
-        currencies: result.currencies,
-      });
+      this.setState({currencies: result.currencies})
     };
-    getCurrencyFromGraph();
+
+    getCategoryFromGraph();
   }
 
   statusCart() {
@@ -51,8 +50,8 @@ class Navbar extends PureComponent {
 
   quntityValue() {
     let quantity = 0;
-    for (let i = 0; i < this.props.favourites.length; i++) {
-      quantity += this.props.favourites[i].qty;
+    for (let i = 0; i < this.props.cart.length; i++) {
+      quantity += this.props.cart[i].qty;
     }
     return quantity;
   }
@@ -177,7 +176,7 @@ class Navbar extends PureComponent {
                 reducedCart={this.props.reducedCart}
                 quantity={this.quntityValue()}
                 currency={this.state.currency}
-                favourites={this.props.favourites}
+                cart={this.props.cart}
                 handleOnClickAdd={this.props.handleOnClickAdd}
                 handleOnClickRemove={this.props.handleOnClickRemove}
                 styles={styles}

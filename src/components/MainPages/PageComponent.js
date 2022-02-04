@@ -8,7 +8,7 @@ import {currencySignMap} from "../utils/Constants";
 class PageComponent extends PureComponent {
   isFavourite = () => {
     const isFavourite = Boolean(
-      this.props.favourites.find(
+      this.props.cart.find(
         (favouriteProduct) => favouriteProduct.id === this.props.product.id
       )
     );

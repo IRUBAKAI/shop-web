@@ -55,6 +55,10 @@ input::placeholder {
   background-color: #fff;
   color: #000;
 }
+.finish_img {
+  width: 100%;
+  background-size: cover;
+}
 @media (max-width: 450) {
   section {
     text-align: center;

@@ -1,7 +1,8 @@
 import { PureComponent } from "react";
 import React from "react";
-const src =
-  "https://www.epschool.org/wp-content/uploads/2021/08/Congratulations.jpg";
+import styles from "./Checkout.module.css";
+
+const src = "https://www.epschool.org/wp-content/uploads/2021/08/Congratulations.jpg";
 
 class FinishPage extends PureComponent {
   render() {
@@ -9,7 +10,7 @@ class FinishPage extends PureComponent {
       <>
         <div>
           <img
-            style={{ width: "100%", backgroundSize: "cover" }}
+            className={styles.finish_img}
             src={src}
             alt=""
           />

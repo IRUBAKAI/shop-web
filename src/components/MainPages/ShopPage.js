@@ -2,8 +2,23 @@ import React from "react";
 import styles from "./ShopPage.module.css";
 import { PureComponent } from "react";
 import PageComponent from "./PageComponent";
+import { GRAPHQL_API, GET_CATEGORY } from "../utils/Constants";
+import axios from "axios";
 
 class ShopPage extends PureComponent {
+  componentDidMount() {
+    const getCategoryFromGraph = async () => {
+      const queryResult = await axios.post(GRAPHQL_API, {
+        query: GET_CATEGORY,
+      });
+
+      const result = queryResult.data.data;
+      this.props.updateCategories(result.categories);
+    };
+
+    getCategoryFromGraph();
+  }
+
   render() {
     return (
       <>
@@ -19,7 +34,7 @@ class ShopPage extends PureComponent {
                     <PageComponent
                       index={index}
                       currency={this.props.currency}
-                      favourites={this.props.favourites}
+                      cart={this.props.cart}
                       product={product}
                       handleOnClickAdd={this.props.handleOnClickAdd}
                     />

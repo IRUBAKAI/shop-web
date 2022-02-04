@@ -1,7 +1,6 @@
 export const GRAPHQL_API = "http://localhost:4000/graphql";
 export const GET_CATEGORY = `
     query category{
-        currencies
         categories {
             name
             products {
@@ -30,11 +29,11 @@ export const GET_CATEGORY = `
         }
     }
   `;
-export const GET_CURRENCY = `
+  export const GET_CURRENCY = `
     query {
         currencies
     }
-  `;
+  `
 export const GET_ID = (id) =>
   `query {
        product (id: "${id}") {
